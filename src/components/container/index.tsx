@@ -1,24 +1,19 @@
 import React from 'react';
-import styled from 'styled-components/native';
+import { StyleProp, ViewStyle } from 'react-native';
+import { StyledContainer } from './styles';
 
 interface ContainerProps {
   direction?: string;
   align?: string;
   justify?: string;
   gap?: string;
-  style?: any;
+  style?: StyleProp<ViewStyle>;
   children: React.ReactNode;
 }
 
 export default function Container({ direction, align, justify, gap, style, children }: ContainerProps) {
-  const Container = styled.View<any>`
-    flex-direction: ${(props) => props.direction || 'column'};
-    align-items: ${(props) => props.align || 'center'};
-    justify-content: ${(props) => props.justify || 'flex-start'};
-    gap: ${(props) => props.gap || '0px'};
-  `
   return (
-    <Container
+    <StyledContainer
       direction={direction}
       align={align}
       justify={justify}
@@ -26,6 +21,6 @@ export default function Container({ direction, align, justify, gap, style, child
       style={style}
     >
       {children}
-    </Container>
+    </StyledContainer>
   )
 }
