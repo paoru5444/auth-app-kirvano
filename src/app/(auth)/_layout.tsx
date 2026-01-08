@@ -6,7 +6,7 @@ export default function RootLayout() {
 
 
   return (
-    <SafeAreaView style={{ height: '100%', backgroundColor: '#F8FAFC' }}>
+    <SafeAreaView style={{ height: '100%', backgroundColor: '#ffffff' }}>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <ScrollView keyboardShouldPersistTaps="handled">
           <Slot />
