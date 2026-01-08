@@ -1,14 +1,13 @@
-import entrance from '@/src/assets/entrance.webp'
-import logo from '@/src/assets/logo.webp'
-import mail from '@/src/assets/mail.webp'
-import padlock from '@/src/assets/padlock.webp'
-import user from '@/src/assets/user.webp'
-
+import signInHeader from '@/src/assets/background/sign-in-header.webp'
+import biometrics from '@/src/assets/icons/biometrics.png'
+import logo from '@/src/assets/icons/logo.png'
 
 export const images = {
-  logo,
-  entrance,
-  user,
-  mail,
-  padlock
+  icons: {
+    logo,
+    biometrics,
+  },
+  backgrounds: {
+    signInHeader
+  }
 }
