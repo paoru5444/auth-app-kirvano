@@ -1,5 +1,6 @@
 import { Container, CustomButton, CustomInput, Typography } from '@/components'
 import { images } from '@/src/constants'
+import api from '@/src/services/api'
 import { zodResolver } from '@hookform/resolvers/zod'
 import React from 'react'
 import { useForm } from 'react-hook-form'
@@ -8,7 +9,7 @@ import { FormWrapper, HeaderContainer, Line, Separator } from './biometric-login
 import { LoginFormData, signInSchema } from './schema.validator'
 
 
-export default function SignIn() {
+export default function BiometricLogin() {
   const {
     control,
     handleSubmit,
@@ -21,16 +22,20 @@ export default function SignIn() {
     }
   })
 
-  const onSubmit = async (data: any) => {
+  const signInWithCredentials = async (data: any) => {
     try {
       console.log('Dados válidos:', data);
       Keyboard.dismiss();
+      const { email, password } = data || {}
+      const response = await api.post('/api/login', { email, password })
     } catch (error) {
-
+      console.log('error: ', error)
     }
   }
 
-  const handleBiometricsSignIn = () => { }
+  const signInWithBiometry = () => { }
+
+  const validateBiometricAvailability = () => { }
 
   return (
     <Container justify='space-between'>
@@ -68,7 +73,7 @@ export default function SignIn() {
 
         <CustomButton
           label="Sign In"
-          onPress={handleSubmit(onSubmit)}
+          onPress={handleSubmit(signInWithCredentials)}
         />
 
         <Separator>
@@ -79,15 +84,11 @@ export default function SignIn() {
 
         <CustomButton
           label="Reconhecimento Biométrico"
-          onPress={handleBiometricsSignIn}
+          onPress={signInWithBiometry}
           variant="secondary"
           leftIcon={images.icons.biometrics}
         />
       </FormWrapper>
-
-      {/* <View>
-        <Text>Copyright 2025 slothUI ©</Text>
-      </View> */}
     </Container>
   )
 }
