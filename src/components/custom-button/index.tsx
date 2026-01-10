@@ -15,10 +15,11 @@ export default function CustomButton({
   label,
   variant = 'primary',
   leftIcon,
-  onPress
+  onPress,
+  ...props
 }: CustomButtonProps) {
   return (
-    <ButtonWrapper variant={variant} onPress={onPress}>
+    <ButtonWrapper variant={variant} onPress={onPress} {...props}>
       {leftIcon && (
         <Image source={leftIcon} style={{ width: 18, height: 18 }} />
       )}

@@ -2,14 +2,17 @@ import { Container, CustomButton, CustomInput, Typography } from '@/components'
 import { images } from '@/src/constants'
 import api from '@/src/services/api'
 import { zodResolver } from '@hookform/resolvers/zod'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Image, Keyboard, Pressable, View } from 'react-native'
+import { authenticate, checkBiometricAvailability } from '../../services/biometry.service'
 import { FormWrapper, HeaderContainer, Line, Separator } from './biometric-login.styles'
 import { LoginFormData, signInSchema } from './schema.validator'
 
-
 export default function BiometricLogin() {
+  const [isSupported, setIsSupported] = useState(false)
+  const [biometricType, setBiometricType] = useState('')
+
   const {
     control,
     handleSubmit,
@@ -33,9 +36,25 @@ export default function BiometricLogin() {
     }
   }
 
-  const signInWithBiometry = () => { }
+  const signInWithBiometry = async () => {
+    const result = await authenticate({
+      promptMessage: 'Login com biometria',
+      fallbackLabel: 'Usar senha',
+      cancelLabel: 'Cancelar',
+    })
 
-  const validateBiometricAvailability = () => { }
+    if (result.success) { }
+  }
+
+  const validateBiometricAvailability = async () => {
+    const { isSupported, biometricType } = await checkBiometricAvailability()
+    setIsSupported(isSupported)
+    setBiometricType(biometricType)
+  }
+
+  useEffect(() => {
+    validateBiometricAvailability()
+  }, [])
 
   return (
     <Container justify='space-between'>
