@@ -20,15 +20,12 @@ export const checkBiometricAvailability = async () => {
     }
   }
 
-  console.log('isSuported: ', isSupported)
-  console.log('biometricType: ', biometricType)
   return { isSupported, biometricType }
 };
 
 export const authenticate = async (options: LocalAuthenticationOptions) => {
   try {
     const isEnrolled = await LocalAuthentication.isEnrolledAsync();
-    console.log('isEnrolled: ', isEnrolled)
 
     if (!isEnrolled) {
       return {

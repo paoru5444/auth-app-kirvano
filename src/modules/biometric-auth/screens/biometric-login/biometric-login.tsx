@@ -35,7 +35,6 @@ export default function BiometricLogin() {
 
   const signInWithCredentials = async (data: any) => {
     try {
-      console.log('Dados válidos:', data);
       Keyboard.dismiss();
       await credentialsLogin(data)
 
