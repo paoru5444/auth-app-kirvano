@@ -1,18 +1,19 @@
 import { ButtonVariant, ButtonVariantTypes } from "@/shared/types/components.types";
+import { colors } from "@/src/constants/theme";
 import styled from "styled-components/native";
 
 export const variants: ButtonVariant = {
   primary: {
-    background: '#1D61E7',
+    background: colors.blue,
     borderWidth: '0px',
-    borderColor: '#ffffffff',
-    textColor: '#ffffff'
+    borderColor: 'transparent',
+    textColor: colors.white
   },
   secondary: {
-    background: '#ffffffff',
+    background: 'transparent',
     borderWidth: '2px',
-    borderColor: '#EDF1F3',
-    textColor: '#1A1C1E'
+    borderColor: colors.lightGray,
+    textColor: colors.dark
   }
 }
 

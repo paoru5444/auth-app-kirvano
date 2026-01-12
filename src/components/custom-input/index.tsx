@@ -1,3 +1,4 @@
+import { colors } from '@/src/constants/theme';
 import React, { useState } from 'react';
 import { Control, Controller } from 'react-hook-form';
 import { KeyboardTypeOptions, View } from 'react-native';
@@ -33,7 +34,7 @@ function Input({
 
   return (
     <View style={{ gap: 8 }}>
-      <Typography color={'#6C7278'} size='12px'>{label}</Typography>
+      <Typography color={colors.gray} size='12px'>{label}</Typography>
 
       <Controller
         control={control}
@@ -46,7 +47,6 @@ function Input({
             onFocus={() => setIsFocused(true)}
             onChangeText={onChange}
             value={value}
-            style={{ backgroundColor: '#ffffff' }}
             borderVariant={borderVariant}
             autoCorrect={false}
             keyboardType={keyboardType}
@@ -57,7 +57,7 @@ function Input({
       />
 
       {error && (
-        <Typography color={'#F54927'} size='12px'>
+        <Typography color={colors.red} size='12px'>
           * {error?.message ?? ''}
         </Typography>
       )}

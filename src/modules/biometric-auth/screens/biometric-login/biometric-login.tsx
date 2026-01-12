@@ -1,5 +1,6 @@
 import { Container, CustomButton, CustomInput, Typography } from '@/components'
 import { images } from '@/src/constants'
+import { colors } from '@/src/constants/theme'
 import useStorage from '@/src/hooks/useStorage'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as LocalAuthentication from 'expo-local-authentication'
@@ -107,8 +108,8 @@ export default function BiometricLogin() {
         <Image source={images.icons.logo} style={{ width: 90, height: 30 }} />
 
         <View style={{ gap: 12 }}>
-          <Typography size='30px' weight={800} color='#ffffff'>Sign in to your{'\n'}Account</Typography>
-          <Typography color='#ffffff'>Create, launch, and scale your digital product profitably.</Typography>
+          <Typography size='30px' weight={800} color={colors.white}>Sign in to your{'\n'}Account</Typography>
+          <Typography color={colors.white}>Create, launch, and scale your digital product profitably.</Typography>
         </View>
       </HeaderContainer>
 
@@ -132,7 +133,7 @@ export default function BiometricLogin() {
         />
 
         <Pressable>
-          <Typography color={'#6C7278'} size='12px'>Forgot Password?</Typography>
+          <Typography color={colors.gray} size='12px'>Forgot Password?</Typography>
         </Pressable>
 
         <CustomButton
@@ -145,7 +146,7 @@ export default function BiometricLogin() {
           <>
             <Separator>
               <Line />
-              <Typography size='12px' weight={400} color='#6C7278'>Or login with</Typography>
+              <Typography size='12px' weight={400} color={colors.gray}>Or login with</Typography>
               <Line />
             </Separator>
 

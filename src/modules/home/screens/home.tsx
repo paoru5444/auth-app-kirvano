@@ -22,7 +22,7 @@ export default function Home() {
   }
 
   return (
-    <Container align='center' justify='center' gap='24' style={{ height: '100%', padding: 32 }}>
+    <Container align='center' justify='center' gap='24px' style={{ height: '100%', padding: 32 }}>
       {user?.name && (<Typography size='28px' weight={600}>Bem vindo, {user.name} 👋!</Typography>)}
       <CustomButton label='Logout' onPress={handleLogout} />
     </Container>

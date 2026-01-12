@@ -1,3 +1,4 @@
+import { colors } from "@/src/constants/theme";
 import { Dimensions } from "react-native";
 import styled from "styled-components/native";
 const { width, height } = Dimensions.get('screen')
@@ -30,5 +31,5 @@ export const Separator = styled.View`
 export const Line = styled.View`
   flex: 1%;
   border-width: 1px;
-  border-color: #EDF1F3;
+  border-color: ${colors.lightGray}
 `
