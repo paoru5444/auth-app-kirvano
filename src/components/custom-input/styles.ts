@@ -2,7 +2,7 @@ import { colors } from "@/src/constants/theme";
 import styled from "styled-components/native";
 
 const borderColor: Record<string, string> = {
-  blur: colors.white,
+  blur: colors.lightGray,
   focused: colors.dark,
   error: colors.red
 }

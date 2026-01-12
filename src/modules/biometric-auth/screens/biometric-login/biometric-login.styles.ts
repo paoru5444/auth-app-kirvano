@@ -18,7 +18,6 @@ export const FormWrapper = styled.View`
   padding: 24px 16px;
   gap: 16px;
   background-color: ${colors.white};
-  border-radius: 24px;
 `
 
 export const Separator = styled.View`

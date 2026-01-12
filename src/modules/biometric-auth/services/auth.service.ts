@@ -7,7 +7,7 @@ export function setupMock() {
 
   mock.onPost('/api/login').reply((config) => {
     const { email, password } = JSON.parse(config.data)
-    const user = { id: 1, name: 'Caio Jorge', email, password }
+    const user = { id: 1, name: 'John Doe', email, password }
 
     if (email === 'server@error.com') {
       return [500, { error: 'Internal server error' }]

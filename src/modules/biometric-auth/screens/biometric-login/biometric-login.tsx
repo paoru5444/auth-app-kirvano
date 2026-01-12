@@ -17,7 +17,6 @@ export default function BiometricLogin() {
   const router = useRouter();
   const [isSupported, setIsSupported] = useState(false)
   const [isInAutoLogin, setIsInAutoLogin] = useState(false)
-  const [biometricType, setBiometricType] = useState('')
   const credentialsLogin = useAuthStore((state) => state.credentialsLogin)
   const hasBiometryEnabled = useAuthStore((state) => state.hasBiometryEnabled)
   const setHasBiometryEnabled = useAuthStore((state) => state.setHasBiometryEnabled)
@@ -77,19 +76,19 @@ export default function BiometricLogin() {
     if (response?.status !== 200) {
       setHasBiometryEnabled(false)
       setIsInAutoLogin(false)
-      Alert.alert('Falha no login', 'Entrar com credenciais e habilitar biometria novamente', [{ text: 'OK' }])
+      Alert.alert('Login Failed', 'Please sign in with your credentials to re-enable biometrics', [{ text: 'OK' }])
       return
     }
 
     if (!isEnrolled) {
       setIsInAutoLogin(false)
-      Alert.alert('Biometria não habilitada', 'Habilite a biometria nas configurações do aparelho', [{ text: 'OK' }])
+      Alert.alert('Biometrics Not Enabled', 'Please enable biometrics in your device settings', [{ text: 'OK' }])
     }
 
     const result = await authenticate({
-      promptMessage: 'Login com biometria',
-      fallbackLabel: 'Usar senha',
-      cancelLabel: 'Cancelar',
+      promptMessage: 'Sign in with biometrics',
+      fallbackLabel: 'Use password',
+      cancelLabel: 'Cancel',
     })
 
     if (result.success) {
@@ -99,9 +98,8 @@ export default function BiometricLogin() {
   }
 
   const validateBiometricAvailability = async () => {
-    const { isSupported, biometricType } = await checkBiometricAvailability()
+    const { isSupported } = await checkBiometricAvailability()
     setIsSupported(isSupported)
-    setBiometricType(biometricType)
   }
 
   useEffect(() => {
@@ -125,7 +123,7 @@ export default function BiometricLogin() {
           name='email'
           label='Email'
           keyboardType='email-address'
-          placeholder="johnwick@gmail.com"
+          placeholder="john.doe@gmail.com"
           error={errors.email}
         />
 
@@ -157,7 +155,7 @@ export default function BiometricLogin() {
             </Separator>
 
             <CustomButton
-              label="Reconhecimento Biométrico"
+              label="Biometric Authentication"
               onPress={signInWithBiometry}
               variant="secondary"
               leftIcon={images.icons.biometrics}
