@@ -48,16 +48,17 @@ export default function BiometricLogin() {
             router.navigate('/')
           },
         }, {
-          text: 'Prefiro não utilizar', onPress: async () => {
+          text: 'Not Now', onPress: async () => {
             router.navigate('/')
           }
         }]
-        Alert.alert('Salvar Biometria', 'Quer usar biometria nos próximos acessos?', alertAction)
+        Alert.alert('Enable Biometrics', 'Would you like to use biometrics for future sign-ins?', alertAction)
       } else {
         router.navigate('/')
       }
     } catch (error) {
-      Alert.alert('Falha no login', 'Falha ao realizar login, tente mais tarde', [{ text: 'OK' }])
+      console.log('error: ', error)
+      Alert.alert('Login Failed', 'Unable to sign in. Please try again later', [{ text: 'OK' }])
     }
   }
 
@@ -91,8 +92,9 @@ export default function BiometricLogin() {
       cancelLabel: 'Cancel',
     })
 
+    setIsInAutoLogin(false)
+
     if (result.success) {
-      setIsInAutoLogin(false)
       router.navigate('/')
     }
   }
