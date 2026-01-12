@@ -34,11 +34,14 @@
 
 ## Melhorias futuras
 
-- Desenvolvimento de testes unitários e de integração
+- Desenvolvimento de testes unitários e de integração.
+- Melhorar o Design System, adicionando mais variáveis e melhorando o acesso a elas dentro dos arquivos de style.
 - Criação de um componente "Notification" para exibir os erros de forma mais amigável.
-- Buscar melhorias na integração de persistência do store entre Zustand e MMKV
-- Melhorar splash screen
+- Transformar Alerts em BottomSheets.
+- Buscar melhorias na integração de persistência do store entre Zustand e MMKV.
+- Melhorar de design splash screen
 - Criação de um componente Form reutilizavel
+- Revisar tipagens mais complexas com mais tempo
 
 ## Tempo gasto
 
