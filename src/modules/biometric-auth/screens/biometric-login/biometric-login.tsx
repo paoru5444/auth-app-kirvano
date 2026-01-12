@@ -1,9 +1,9 @@
 import { Container, CustomButton, CustomInput, Typography } from '@/components'
 import { images } from '@/src/constants'
+import useStorage from '@/src/hooks/useStorage'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as LocalAuthentication from 'expo-local-authentication'
 import { useRouter } from 'expo-router'
-import * as SecureStore from 'expo-secure-store'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Alert, Image, Keyboard, Pressable, View } from 'react-native'
@@ -18,8 +18,7 @@ export default function BiometricLogin() {
   const [biometricType, setBiometricType] = useState('')
   const credentialsLogin = useAuthStore((state) => state.credentialsLogin)
   const hasBiometryEnabled = useAuthStore((state) => state.hasBiometryEnabled)
-  const setHasBiometryEnabled = useAuthStore((state) => state.setHasBiometryEnabled)
-  const setAuthenticated = useAuthStore((state) => state.setAuthenticated)
+  const { set, get } = useStorage()
 
   const {
     control,
@@ -41,9 +40,9 @@ export default function BiometricLogin() {
       if (isSupported && !hasBiometryEnabled) {
         const alertAction = [{
           text: 'OK', onPress: async () => {
-            setHasBiometryEnabled(true)
-            await SecureStore.setItemAsync('email', JSON.stringify(data.email))
-            await SecureStore.setItemAsync('password', JSON.stringify(data.password))
+            set('hasBiometryEnabled', true)
+            set('email', data?.email)
+            set('password', data?.password)
             router.navigate('/')
           },
         }, {
@@ -52,27 +51,27 @@ export default function BiometricLogin() {
           }
         }]
         Alert.alert('Salvar Biometria', 'Quer usar biometria nos próximos acessos?', alertAction)
-        setAuthenticated(true)
       } else {
         router.navigate('/')
       }
     } catch (error) {
-      console.log('error: ', error)
+      Alert.alert('Falha no login', 'Falha ao realizar login, tente mais tarde', [{ text: 'OK' }])
     }
   }
 
   const signInWithBiometry = async () => {
     const isEnrolled = await LocalAuthentication.isEnrolledAsync();
-    const email = await SecureStore.getItemAsync('email')
-    const password = await SecureStore.getItemAsync('password')
+    const email = get('email')
+    const password = get('password')
 
     const response: any = await credentialsLogin({
-      email: JSON.parse(email ?? ''),
-      password: JSON.parse(password ?? '')
+      email,
+      password
     })
 
     if (response?.status !== 200) {
-      setHasBiometryEnabled(false)
+      set('hasBiometryEnabled', false)
+      set('isAuthenticated', false)
       Alert.alert('Falha no login', 'Entrar com credenciais e habilitar biometria novamente', [{ text: 'OK' }])
       return
     }
@@ -88,7 +87,6 @@ export default function BiometricLogin() {
     })
 
     if (result.success) {
-      setAuthenticated(true)
       router.navigate('/')
     }
   }

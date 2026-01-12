@@ -1,6 +1,5 @@
-// services/api.js
 import axios from 'axios';
-import * as SecureStore from 'expo-secure-store';
+import useStorage from '../hooks/useStorage';
 
 const api = axios.create({
   baseURL: 'https://api.kirvano-teste.com',
@@ -9,7 +8,8 @@ const api = axios.create({
 
 api.interceptors.request.use(
   async (config) => {
-    const token = await SecureStore.getItemAsync('token');
+    const { get } = useStorage()
+    const token = get('token');
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;

@@ -1,34 +1,35 @@
+import useStorage from '@/src/hooks/useStorage';
 import api from '@/src/services/api';
-import * as SecureStore from 'expo-secure-store';
 import { create } from 'zustand';
 
+type User = {
+  name?: string;
+  email?: string;
+}
 interface AuthStore {
-  isAuthenticated: boolean,
-  hasBiometryEnabled: boolean,
-  user: Object | null,
-  setAuthenticated: (isAuthenticated: boolean) => void,
-  setHasBiometryEnabled: (hasBiometryEnabled: boolean) => void,
-  credentialsLogin: (credentials: { email: string, password: string }) => void,
+  isAuthenticated: boolean | null;
+  hasBiometryEnabled: boolean | null;
+  user: User | null;
+  credentialsLogin: (credentials: { email: string, password: string }) => void;
 }
 
-export const useAuthStore = create<AuthStore>((set, get) => ({
-  isAuthenticated: false,
-  hasBiometryEnabled: false,
-  user: {},
-  setAuthenticated: async (isAuthenticated) => {
-    set({ isAuthenticated })
-  },
-  setHasBiometryEnabled: (hasBiometryEnabled) => {
-    set({ hasBiometryEnabled })
-  },
-  credentialsLogin: async ({ email, password }) => {
-    const response = await api.post('/api/login', { email, password })
-    const { token, refreshToken, user } = response.data
+export const useAuthStore = create<AuthStore>(() => {
+  const { get, set } = useStorage()
 
-    await SecureStore.setItemAsync('token', JSON.stringify(token))
-    await SecureStore.setItemAsync('refresh_token', JSON.stringify(refreshToken))
+  return ({
+    isAuthenticated: get('isAuthenticated'),
+    hasBiometryEnabled: get('hasBiometryEnabled'),
+    user: get('user'),
+    credentialsLogin: async ({ email, password }) => {
+      const response = await api.post('/api/login', { email, password })
+      const { token, refreshToken, user } = response.data
 
-    set({ user: user })
-    return response;
-  }
-}))
+      set('token', token)
+      set('refresh_token', refreshToken)
+      set('isAuthenticated', true)
+      set('user', user)
+
+      return response;
+    }
+  })
+})

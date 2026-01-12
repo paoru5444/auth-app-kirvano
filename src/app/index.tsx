@@ -5,7 +5,7 @@ import { useAuthStore } from '../modules/biometric-auth/store'
 import Home from '../modules/home/screens/home'
 
 export default function index() {
-  const isAuthenticated = useAuthStore()
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
 
   if (!isAuthenticated) {
     return <Redirect href="/sign-in" />
