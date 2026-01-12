@@ -16,6 +16,7 @@ import { LoginFormData, signInSchema } from './schema.validator'
 export default function BiometricLogin() {
   const router = useRouter();
   const [isSupported, setIsSupported] = useState(false)
+  const [isInAutoLogin, setIsInAutoLogin] = useState(false)
   const [biometricType, setBiometricType] = useState('')
   const credentialsLogin = useAuthStore((state) => state.credentialsLogin)
   const hasBiometryEnabled = useAuthStore((state) => state.hasBiometryEnabled)
@@ -66,6 +67,8 @@ export default function BiometricLogin() {
     const email = get('email')
     const password = get('password')
 
+    setIsInAutoLogin(true)
+
     const response: any = await credentialsLogin({
       email,
       password
@@ -73,11 +76,13 @@ export default function BiometricLogin() {
 
     if (response?.status !== 200) {
       setHasBiometryEnabled(false)
+      setIsInAutoLogin(false)
       Alert.alert('Falha no login', 'Entrar com credenciais e habilitar biometria novamente', [{ text: 'OK' }])
       return
     }
 
     if (!isEnrolled) {
+      setIsInAutoLogin(false)
       Alert.alert('Biometria não habilitada', 'Habilite a biometria nas configurações do aparelho', [{ text: 'OK' }])
     }
 
@@ -88,6 +93,7 @@ export default function BiometricLogin() {
     })
 
     if (result.success) {
+      setIsInAutoLogin(false)
       router.navigate('/')
     }
   }
@@ -155,6 +161,8 @@ export default function BiometricLogin() {
               onPress={signInWithBiometry}
               variant="secondary"
               leftIcon={images.icons.biometrics}
+              activityColor={colors.dark}
+              isSubmitting={isInAutoLogin}
             />
           </>
         )}
