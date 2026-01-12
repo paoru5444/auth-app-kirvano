@@ -19,6 +19,7 @@ export default function BiometricLogin() {
   const [biometricType, setBiometricType] = useState('')
   const credentialsLogin = useAuthStore((state) => state.credentialsLogin)
   const hasBiometryEnabled = useAuthStore((state) => state.hasBiometryEnabled)
+  const setHasBiometryEnabled = useAuthStore((state) => state.setHasBiometryEnabled)
   const { set, get } = useStorage()
 
   const {
@@ -41,7 +42,7 @@ export default function BiometricLogin() {
       if (isSupported && !hasBiometryEnabled) {
         const alertAction = [{
           text: 'OK', onPress: async () => {
-            set('hasBiometryEnabled', true)
+            setHasBiometryEnabled(true)
             set('email', data?.email)
             set('password', data?.password)
             router.navigate('/')
@@ -71,8 +72,7 @@ export default function BiometricLogin() {
     })
 
     if (response?.status !== 200) {
-      set('hasBiometryEnabled', false)
-      set('isAuthenticated', false)
+      setHasBiometryEnabled(false)
       Alert.alert('Falha no login', 'Entrar com credenciais e habilitar biometria novamente', [{ text: 'OK' }])
       return
     }
@@ -103,8 +103,8 @@ export default function BiometricLogin() {
   }, [])
 
   return (
-    <Container justify='space-between' style={{ flex: 1, margin: 0 }}>
-      <HeaderContainer source={images.backgrounds.signInHeader} resizeMode='cover'>
+    <Container style={{ flex: 1, margin: 0 }}>
+      <HeaderContainer>
         <Image source={images.icons.logo} style={{ width: 90, height: 30 }} />
 
         <View style={{ gap: 12 }}>

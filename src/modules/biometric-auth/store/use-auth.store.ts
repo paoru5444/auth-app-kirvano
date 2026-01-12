@@ -10,26 +10,48 @@ interface AuthStore {
   isAuthenticated: boolean | null;
   hasBiometryEnabled: boolean | null;
   user: User | null;
-  credentialsLogin: (credentials: { email: string, password: string }) => void;
+  credentialsLogin: (credentials: { email: string, password: string }) => Promise<any>;
+  setIsAuthenticated: (value: boolean) => void;
+  setHasBiometryEnabled: (value: boolean) => void;
+  setUser: (user: User) => void;
 }
 
-export const useAuthStore = create<AuthStore>(() => {
-  const { get, set } = useStorage()
+const { get, set: setStorage } = useStorage()
 
-  return ({
-    isAuthenticated: get('isAuthenticated'),
-    hasBiometryEnabled: get('hasBiometryEnabled'),
-    user: get('user'),
-    credentialsLogin: async ({ email, password }) => {
-      const response = await api.post('/api/login', { email, password })
-      const { token, refreshToken, user } = response.data
+export const useAuthStore = create<AuthStore>((set) => ({
+  isAuthenticated: get('isAuthenticated') ?? false,
+  hasBiometryEnabled: get('hasBiometryEnabled') ?? false,
+  user: get('user'),
 
-      set('token', token)
-      set('refresh_token', refreshToken)
-      set('isAuthenticated', true)
-      set('user', user)
+  setIsAuthenticated: (value: boolean) => {
+    setStorage('isAuthenticated', value)
+    set({ isAuthenticated: value })
+  },
 
-      return response;
-    }
-  })
-})
+  setHasBiometryEnabled: (value: boolean) => {
+    setStorage('hasBiometryEnabled', value)
+    set({ hasBiometryEnabled: value })
+  },
+
+  setUser: (user: User) => {
+    setStorage('user', user)
+    set({ user })
+  },
+
+  credentialsLogin: async ({ email, password }) => {
+    const response = await api.post('/api/login', { email, password })
+    const { token, refreshToken, user } = response.data
+
+    setStorage('token', token)
+    setStorage('refresh_token', refreshToken)
+    setStorage('isAuthenticated', true)
+    setStorage('user', user)
+
+    set({
+      isAuthenticated: true,
+      user
+    })
+
+    return response;
+  }
+}))

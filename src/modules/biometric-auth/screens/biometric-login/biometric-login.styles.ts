@@ -1,15 +1,15 @@
 import { colors } from "@/src/constants/theme";
 import { Dimensions } from "react-native";
 import styled from "styled-components/native";
-const { width, height } = Dimensions.get('screen')
+const { width } = Dimensions.get('screen')
 
-
-export const HeaderContainer = styled.ImageBackground`
+export const HeaderContainer = styled.View`
   width: ${width}px;
   height: 300px;
   justify-content: flex-end;
   gap: 48px;
   padding: 32px 16px;
+  background-color: ${colors.dark};
 `
 
 export const FormWrapper = styled.View`
@@ -17,6 +17,8 @@ export const FormWrapper = styled.View`
   width: 100%;
   padding: 24px 16px;
   gap: 16px;
+  background-color: ${colors.white};
+  border-radius: 24px;
 `
 
 export const Separator = styled.View`
