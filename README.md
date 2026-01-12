@@ -1,9 +1,12 @@
-# Welcome to your Expo app 👋
+# Biometric Login - Teste Técnico
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+## Decisões Técnicas
+- Foram seguidos os requisitos para a implementação
+- Junto ao Zod, foi utilizado o React Hook Form para o gerênciamento do formulário.
+- Foi utilizado React Native MMKV para persistência e Zustand para gerenciamento de estado.
+- Além da arquitetura proposta, criei os diretórios: hooks, constants e components, para serem reutilizados.
 
-## Get started
-
+## Como executar
 1. Install dependencies
 
    ```bash
@@ -13,40 +16,24 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
 2. Start the app
 
    ```bash
-   npx expo start
+   npx expo run:ios / npx expo run:android
    ```
 
-In the output, you'll find options to open the app in a
+## Funcionalidades impelentadas
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+- Autenticação com email e senha
+- Auto login
+- Autenticação com biometria
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## Melhorias futuras
 
-## Get a fresh project
+- Desenvolvimento de testes unitários e de integração
+- Criação de um componente "Notification" para exibir os erros de forma mais amigável.
+- Buscar melhorias na integração de persistência do store entre Zustand e MMKV
+- Melhorar splash screen
+- Criação de um componente Form reutilizavel
 
-When you're ready, run:
+## Tempo gasto
 
-```bash
-npm run reset-project
-```
+- Aproximadamente 20 horas
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
-# auth-app-kirvano
-# auth-app-kirvano
