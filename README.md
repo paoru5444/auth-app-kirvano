@@ -7,7 +7,7 @@
 - Além da arquitetura proposta, criei os diretórios: hooks, constants e components, para serem reutilizados.
 - Idioma da aplicação em inglês, refletindo o futuro posicionamento da empresa.
 
-## Como executar
+## Como Executar
 1. Install dependencies
 
    ```bash
@@ -26,13 +26,13 @@
    npx expo run:android
    ```
 
-## Funcionalidades impelentadas
+## Funcionalidades Implementadas
 
 - Autenticação com email e senha
 - Auto login
 - Autenticação com biometria
 
-## Melhorias futuras
+## Melhorias Futuras
 
 - Desenvolvimento de testes unitários e de integração.
 - Melhorar o Design System, adicionando mais variáveis e melhorando o acesso a elas dentro dos arquivos de style.
@@ -43,12 +43,12 @@
 - Criação de um componente Form reutilizavel
 - Revisar tipagens mais complexas com mais tempo
 
-## Tempo gasto
+## Tempo Gasto
 
 - Aproximadamente 20 horas
 
 
-## Preview do aplicativo:
+## Preview do Aplicativo:
 
 <img width="406" height="1822" alt="preview-app" src="https://github.com/user-attachments/assets/5dc3073d-0cc7-46f8-a5c3-6f11b1a7f377" />
 
