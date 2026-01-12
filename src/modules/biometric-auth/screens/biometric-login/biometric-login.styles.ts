@@ -5,10 +5,10 @@ const { width, height } = Dimensions.get('screen')
 
 export const HeaderContainer = styled.ImageBackground`
   width: ${width}px;
-  height: 260px;
-  justify-content: center;
+  height: 300px;
+  justify-content: flex-end;
   gap: 48px;
-  padding-left: 16px;
+  padding: 32px 16px;
 `
 
 export const FormWrapper = styled.View`

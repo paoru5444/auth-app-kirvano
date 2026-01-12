@@ -1,22 +1,30 @@
 import { Container, CustomButton, CustomInput, Typography } from '@/components'
 import { images } from '@/src/constants'
-import api from '@/src/services/api'
 import { zodResolver } from '@hookform/resolvers/zod'
+import * as LocalAuthentication from 'expo-local-authentication'
+import { useRouter } from 'expo-router'
+import * as SecureStore from 'expo-secure-store'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { Image, Keyboard, Pressable, View } from 'react-native'
+import { Alert, Image, Keyboard, Pressable, View } from 'react-native'
 import { authenticate, checkBiometricAvailability } from '../../services/biometry.service'
+import { useAuthStore } from '../../store'
 import { FormWrapper, HeaderContainer, Line, Separator } from './biometric-login.styles'
 import { LoginFormData, signInSchema } from './schema.validator'
 
 export default function BiometricLogin() {
+  const router = useRouter();
   const [isSupported, setIsSupported] = useState(false)
   const [biometricType, setBiometricType] = useState('')
+  const credentialsLogin = useAuthStore((state) => state.credentialsLogin)
+  const hasBiometryEnabled = useAuthStore((state) => state.hasBiometryEnabled)
+  const setHasBiometryEnabled = useAuthStore((state) => state.setHasBiometryEnabled)
+  const setAuthenticated = useAuthStore((state) => state.setAuthenticated)
 
   const {
     control,
     handleSubmit,
-    formState: { errors }
+    formState: { errors, isSubmitting }
   } = useForm<LoginFormData>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
@@ -29,21 +37,61 @@ export default function BiometricLogin() {
     try {
       console.log('Dados válidos:', data);
       Keyboard.dismiss();
-      const { email, password } = data || {}
-      const response = await api.post('/api/login', { email, password })
+      await credentialsLogin(data)
+
+      if (isSupported && !hasBiometryEnabled) {
+        const alertAction = [{
+          text: 'OK', onPress: async () => {
+            setHasBiometryEnabled(true)
+            await SecureStore.setItemAsync('email', JSON.stringify(data.email))
+            await SecureStore.setItemAsync('password', JSON.stringify(data.password))
+            router.navigate('/')
+          },
+        }, {
+          text: 'Prefiro não utilizar', onPress: async () => {
+            router.navigate('/')
+          }
+        }]
+        Alert.alert('Salvar Biometria', 'Quer usar biometria nos próximos acessos?', alertAction)
+        setAuthenticated(true)
+      } else {
+        router.navigate('/')
+      }
     } catch (error) {
       console.log('error: ', error)
     }
   }
 
   const signInWithBiometry = async () => {
+    const isEnrolled = await LocalAuthentication.isEnrolledAsync();
+    const email = await SecureStore.getItemAsync('email')
+    const password = await SecureStore.getItemAsync('password')
+
+    const response: any = await credentialsLogin({
+      email: JSON.parse(email ?? ''),
+      password: JSON.parse(password ?? '')
+    })
+
+    if (response?.status !== 200) {
+      setHasBiometryEnabled(false)
+      Alert.alert('Falha no login', 'Entrar com credenciais e habilitar biometria novamente', [{ text: 'OK' }])
+      return
+    }
+
+    if (!isEnrolled) {
+      Alert.alert('Biometria não habilitada', 'Habilite a biometria nas configurações do aparelho', [{ text: 'OK' }])
+    }
+
     const result = await authenticate({
       promptMessage: 'Login com biometria',
       fallbackLabel: 'Usar senha',
       cancelLabel: 'Cancelar',
     })
 
-    if (result.success) { }
+    if (result.success) {
+      setAuthenticated(true)
+      router.navigate('/')
+    }
   }
 
   const validateBiometricAvailability = async () => {
@@ -57,7 +105,7 @@ export default function BiometricLogin() {
   }, [])
 
   return (
-    <Container justify='space-between'>
+    <Container justify='space-between' style={{ flex: 1, margin: 0 }}>
       <HeaderContainer source={images.backgrounds.signInHeader} resizeMode='cover'>
         <Image source={images.icons.logo} style={{ width: 90, height: 30 }} />
 
@@ -93,20 +141,26 @@ export default function BiometricLogin() {
         <CustomButton
           label="Sign In"
           onPress={handleSubmit(signInWithCredentials)}
+          isSubmitting={isSubmitting}
         />
 
-        <Separator>
-          <Line />
-          <Typography size='12px' weight={400} color='#6C7278'>Or login with</Typography>
-          <Line />
-        </Separator>
+        {hasBiometryEnabled && (
+          <>
+            <Separator>
+              <Line />
+              <Typography size='12px' weight={400} color='#6C7278'>Or login with</Typography>
+              <Line />
+            </Separator>
 
-        <CustomButton
-          label="Reconhecimento Biométrico"
-          onPress={signInWithBiometry}
-          variant="secondary"
-          leftIcon={images.icons.biometrics}
-        />
+            <CustomButton
+              label="Reconhecimento Biométrico"
+              onPress={signInWithBiometry}
+              variant="secondary"
+              leftIcon={images.icons.biometrics}
+            />
+          </>
+        )}
+
       </FormWrapper>
     </Container>
   )
